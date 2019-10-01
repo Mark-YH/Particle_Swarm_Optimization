@@ -34,6 +34,31 @@ void PSO::run() {
     }
 }
 
+void processOW(Particle *p) {
+    // drop an item which is the lowest cost-performance ratio one
+    int w = 0, v = 0;
+
+    for (int i = 0; i < BIT_SIZE; i++) {
+        w += p->getLocation()[i] * weight[i];
+        v += p->getLocation()[i] * value[i];
+    }
+
+    for (int i = BIT_SIZE - 1; i >= 0; i--) {
+        int tmp = p->getLocation()[i];
+        if (tmp > 0) {
+            tmp--;
+            p->setLocation(i, tmp);
+            w -= weight[i];
+            v -= value[i];
+
+            if (w <= KNAPSACK_SIZE) {
+                p->setFitness(v);
+                break;
+            }
+        }
+    }
+}
+
 void PSO::calcFitness() {
     for (int i = 0; i < POPULATION; i++) {
         int w = 0, v = 0;
@@ -44,7 +69,8 @@ void PSO::calcFitness() {
         }
 
         if (w > KNAPSACK_SIZE) {
-            particle[i].setFitness(v * (0.9 - ((w - KNAPSACK_SIZE) / (double) (2 * KNAPSACK_SIZE))));
+            processOW(&particle[i]);
+//            particle[i].setFitness(v * (0.9 - ((w - KNAPSACK_SIZE) / (double) (2 * KNAPSACK_SIZE))));
         } else {
             particle[i].setFitness(v);
         }
