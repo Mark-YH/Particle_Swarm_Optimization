@@ -8,10 +8,10 @@
 #include "Particle.h"
 
 #define POPULATION 1000
-#define ROUND 100
+#define ROUND 50
 #define KNAPSACK_SIZE 275
 #define C1 1
-#define C2 1.8
+#define C2 1.5
 
 #define DEBUG_MODE 0
 

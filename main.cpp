@@ -1,7 +1,7 @@
 #include <iostream>
 #include "PSO.h"
 
-#define STATISTIC_ROUND 10
+#define STATISTIC_ROUND 1
 
 int main() {
     auto start = std::chrono::steady_clock::now();
