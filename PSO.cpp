@@ -101,10 +101,12 @@ void PSO::calcFitness() {
 void PSO::update() {
     for (int i = 0; i < POPULATION; i++) {
         for (int j = 0; j < BIT_SIZE; j++) {
-            particle[i].setVelocity(j, particle[i].getLastVelocity()[j] +
-                                       C1 * (myRandom(0, 10) / 10.0) *
+            particle[i].setVelocity(j, W * particle[i].getLastVelocity()[j] +
+                                       C1 *
+                                       (myRandom(-10, 10) / 10.0) *
                                        (particle[i].getPBestLocation()[j] - particle[i].getLocation()[j]) +
-                                       C2 * (myRandom(0, 10) / 10.0) *
+                                       C2 *
+                                       (myRandom(-10, 10) / 10.0) *
                                        (gBestLocation[j] - particle[i].getLocation()[j]));
         }
     }
@@ -113,15 +115,18 @@ void PSO::update() {
 void PSO::move() {
     for (int i = 0; i < POPULATION; i++) {
         for (int j = 0; j < BIT_SIZE; j++) {
+            // update location and velocity of next round
+            particle[i].setLastLocation(j, particle[i].getLocation()[j]);
+            particle[i].setLastVelocity(j, particle[i].getVelocity()[j]);
+
             particle[i].setLocation(j, particle[i].getLocation()[j] + particle[i].getVelocity()[j]);
+
+            // stop it while it got out of bound
             if (particle[i].getLocation()[j] > 10) {
                 particle[i].setLocation(j, 10);
             } else if (particle[i].getLocation()[j] < 0) {
                 particle[i].setLocation(j, 0);
             }
-            // update location and velocity of next round
-            particle[i].setLocation(j, particle[i].getLastLocation()[j]);
-            particle[i].setVelocity(j, particle[i].getLastVelocity()[j]);
         }
     }
 }
